@@ -4,6 +4,7 @@ import 'package:xml/xml.dart' as xml;
 
 ZipDecoder? _zipDecoder;
 
+/// Converts a docx file to text.
 /// Only top level numbering is supported.
 String docxToText(
   Uint8List bytes, {

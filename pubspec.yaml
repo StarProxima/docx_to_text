@@ -1,17 +1,17 @@
 name: docx_to_text
-description: A starting point for Dart libraries or applications.
+description: A Dart package to convert docx files to text.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+homepage: https://github.com/StarProxima
+repository: https://github.com/StarProxima/docx_to_text
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
 
-# dependencies:
-#   path: ^1.8.0
-
-dev_dependencies:
-  lints: ^2.0.0
-  test: ^1.21.0
 dependencies:
   archive: ^3.3.6
   xml: ^6.2.2
+  
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.21.0
+
