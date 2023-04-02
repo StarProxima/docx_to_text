@@ -2,10 +2,17 @@ import 'dart:typed_data';
 import 'package:archive/archive.dart';
 import 'package:xml/xml.dart' as xml;
 
-String docxToText(Uint8List bytes) {
-  final archive = ZipDecoder().decodeBytes(bytes);
+ZipDecoder? _zipDecoder;
 
-  String text = '';
+/// Only top level numbering is supported.
+String docxToText(
+  Uint8List bytes, {
+  bool handleNumbering = false,
+}) {
+  _zipDecoder ??= ZipDecoder();
+
+  final archive = _zipDecoder!.decodeBytes(bytes);
+
   final List<String> list = [];
 
   for (final file in archive) {
@@ -13,15 +20,33 @@ String docxToText(Uint8List bytes) {
       final fileContent = String.fromCharCodes(file.content);
       final document = xml.XmlDocument.parse(fileContent);
 
+      print(document);
+
       final paragraphNodes = document.findAllElements('w:p');
+
+      int number = 0;
+      String lastNumId = '0';
 
       for (final paragraph in paragraphNodes) {
         final textNodes = paragraph.findAllElements('w:t');
-        final text = textNodes.map((node) => node.text).join();
+        var text = textNodes.map((node) => node.text).join();
 
-        if (text.isNotEmpty) {
-          list.add(text);
+        if (handleNumbering) {
+          var numbering = paragraph.getElement('w:pPr')?.getElement('w:numPr');
+          if (numbering != null) {
+            final numId =
+                numbering.getElement('w:numId')!.getAttribute('w:val')!;
+
+            if (numId != lastNumId) {
+              number = 0;
+              lastNumId = numId;
+            }
+            number++;
+            text = '$number. $text';
+          }
         }
+
+        list.add(text);
       }
     }
   }
