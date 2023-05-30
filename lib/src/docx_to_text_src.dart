@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:archive/archive.dart';
 import 'package:xml/xml.dart' as xml;
+import 'dart:convert';
 
 ZipDecoder? _zipDecoder;
 
@@ -18,7 +19,7 @@ String docxToText(
 
   for (final file in archive) {
     if (file.isFile && file.name == 'word/document.xml') {
-      final fileContent = String.fromCharCodes(file.content);
+      final fileContent = utf8.decode(file.content);
       final document = xml.XmlDocument.parse(fileContent);
 
       print(document);
@@ -35,8 +36,7 @@ String docxToText(
         if (handleNumbering) {
           var numbering = paragraph.getElement('w:pPr')?.getElement('w:numPr');
           if (numbering != null) {
-            final numId =
-                numbering.getElement('w:numId')!.getAttribute('w:val')!;
+            final numId = numbering.getElement('w:numId')!.getAttribute('w:val')!;
 
             if (numId != lastNumId) {
               number = 0;
