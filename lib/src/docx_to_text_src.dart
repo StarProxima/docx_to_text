@@ -31,12 +31,13 @@ String docxToText(
 
       for (final paragraph in paragraphNodes) {
         final textNodes = paragraph.findAllElements('w:t');
-        var text = textNodes.map((node) => node.text).join();
+        var text = textNodes.map((node) => node.innerText).join();
 
         if (handleNumbering) {
           var numbering = paragraph.getElement('w:pPr')?.getElement('w:numPr');
           if (numbering != null) {
-            final numId = numbering.getElement('w:numId')!.getAttribute('w:val')!;
+            final numId =
+                numbering.getElement('w:numId')!.getAttribute('w:val')!;
 
             if (numId != lastNumId) {
               number = 0;

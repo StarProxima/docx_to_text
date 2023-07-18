@@ -1,6 +1,6 @@
 name: docx_to_text
 description: A small Dart package for converting docx files (Microsoft Word) to string.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/StarProxima
 repository: https://github.com/StarProxima/docx_to_text
 
