@@ -22,8 +22,6 @@ String docxToText(
       final fileContent = utf8.decode(file.content);
       final document = xml.XmlDocument.parse(fileContent);
 
-      print(document);
-
       final paragraphNodes = document.findAllElements('w:p');
 
       int number = 0;
